@@ -239,7 +239,9 @@ public:
         if (!m_file.IsOk())
             return;
 
+#ifndef __WXMSW__
         wxGetApp().FileWatcher().Add(m_file, wxFSW_EVENT_CREATE | wxFSW_EVENT_RENAME | wxFSW_EVENT_MODIFY);
+#endif
         m_loadTime = m_file.GetModificationTime();
     }
 
@@ -267,9 +269,11 @@ public:
         wxASSERT( m_isRespondingGuard );
         m_isRespondingGuard = false;
 
+#ifndef __WXMSW__
         // re-subscribing is necessary if the file was replaced by moving another to its place for example:
         wxGetApp().FileWatcher().Remove(m_file);
         wxGetApp().FileWatcher().Add(m_file, wxFSW_EVENT_CREATE | wxFSW_EVENT_RENAME | wxFSW_EVENT_MODIFY);
+#endif
     }
 
 private:
@@ -277,7 +281,9 @@ private:
     {
         if (m_file.IsOk())
         {
+#ifndef __WXMSW__
             wxGetApp().FileWatcher().Remove(m_file);
+#endif
             m_file.Clear();
         }
     }
